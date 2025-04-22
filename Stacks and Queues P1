@@ -1,0 +1,128 @@
+// stacks and queues ax day 1.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <stack>
+#include <list>
+#include<queue>
+
+using namespace std;
+
+template<typename T>
+class MyStack {
+private:
+    list<T> lst;
+
+public:
+    MyStack() { lst.clear(); }
+    
+    void push(T data) {
+        lst.push_back(data);
+    }
+
+    void pop() {
+        if (lst.empty()) {
+            throw exception("stack is empty - no pop performance");
+        }
+        lst.pop_back();
+    }
+
+    T top() {
+        if (lst.empty()) {
+            throw exception("stack is empty - no pop performance");
+        }
+        return lst.back();
+    }
+
+    bool empty() { return lst.empty(); }
+
+    int size() { return lst.size(); }
+};
+//---------------------------------------------------------------------------------------
+
+void experiment01() {
+    MyStack<int> stk;
+    stk.push(11);
+    stk.push(22);
+    stk.push(33);
+
+    cout << "Size is: " << stk.size() << endl;
+
+    while (!stk.empty()) {
+        cout << "top data is: " << stk.top() << endl;
+        stk.pop();
+    }
+}
+
+
+void experiment02() {
+    std::stack<int> stk;
+    stk.push(11);
+    stk.push(22);
+    stk.push(33);
+
+    cout << "Size is: " << stk.size() << endl;
+
+    while (!stk.empty()) {
+        cout << "top data is: " << stk.top() << endl;
+        stk.pop();
+    }
+}
+
+bool match(char c1, char c2) {
+    if (c1 == '(' && c2 == ')') return true;
+    if (c1 == '[' && c2 == ']') return true;
+    if (c1 == '{' && c2 == '}') return true;
+    if (c1 == '<' && c2 == '>') return true;
+
+    return false;
+}
+
+bool isLeftParathesis(char c) {
+    string validLeftSides = "({[<";
+    int spy = validLeftSides.find(c);
+    return (validLeftSides.find(c) >= 0);
+}
+
+void experiment03() {
+    std::stack<char> stk; // Declare the stack here
+
+    string exp = "{(()[])}";
+    for (char c : exp) {
+        if (isLeftParathesis(c)) {
+            stk.push(c);
+        }
+        else {
+            if (stk.empty()) {
+                cout << "Invalid expression: unmatched closing " << c << endl;
+                return;
+            }
+
+            char leftSide = stk.top();
+            if (match(leftSide, c)) {
+                stk.pop();
+            }
+            else {
+                cout << "Invalid expression: mismatched " << leftSide << " and " << c << endl;
+                return;
+            }
+        }
+    }
+    if (stk.empty()) {
+        cout << "Valid expression \n";
+    }
+    else {
+        cout << "Invalid expression: unmatched opening parenthesis \n";
+    }
+}
+
+
+
+int main()
+{
+    experiment01();
+    experiment02();
+    experiment03();
+
+    std::cout << "ALL DONE rlly !\n";
+}
